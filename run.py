@@ -1,8 +1,9 @@
 #pip install pytube
 from pytube import Playlist ,YouTube
 import re
+import os
 
-url_playlist = 'https://www.youtube.com/watch?v=IoIN1dW4t3k&list=PL93xoMrxRJIvZHL420f63bWIOrcoM6NU-'
+url_playlist = 'https://www.youtube.com/watch?v=Q0mWz1BYH-k&list=PLUitXL66pnO_K_Q_mqnB7MzoHjLnkU_jo&index=110'
 # res= 360p / 720p / 144 
 res = "720p"
 
@@ -15,10 +16,17 @@ for i in range(0,len(listUrl)):
         video = yt.streams.get_highest_resolution()
         # video =   yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc() .first()
         video =   yt.streams.filter(progressive=True, file_extension='mp4',res=res).first()    
-        title = str(i) + '-' + video.title
+        # title = str(i) + '-' + video.title
+        title = video.title
         title = re.sub('[\/:?*"<>|]', '_', title)
-        print("------------------ > : ",title)
-        video.download(title)
-        # break
+
+        print("------------------ > : ",str(i))
+        if not os.path.isdir(title) :
+            print("----- > : ",title)
+            # os.makedirs(title)
+            video.download(title)
+        else:
+            print("----- > : exist : ",title)
+            # break
     except:
         print("error : ",i)
